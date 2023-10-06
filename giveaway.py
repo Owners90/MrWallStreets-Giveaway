@@ -104,4 +104,4 @@ def end_giveaway(client, message):
 
 # Run the app after defining everything
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=80)
+    app.run()
