@@ -3,6 +3,8 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait
 import random
 import time
+from flask import Flask
+import os
 
 API_ID = '23601851'
 API_HASH = '122209a9c58d40ab8947ed409cc49ecd'
@@ -10,6 +12,12 @@ BOT_TOKEN = '6547349199:AAEHYX6dD2R1kdS7lehxq0JzY7YLXhQuYuc'
 MANAGEMENT_CHAT_ID = -1001893099740
 GIVEAWAY_CHAT_ID = -1001862011009
 ALLOWED_USER_IDS = [42094194, 1069032545]
+
+app_flask = Flask(__name__)
+
+@app_flask.route('/')
+def hello():
+    return "Bot is running!"
 
 participants = []
 is_giveaway_active = False
@@ -108,10 +116,17 @@ def end_giveaway(client, message):
     app.send_message(GIVEAWAY_CHAT_ID, "تم اغلاق السحب")
     
 if __name__ == '__main__':
+    # Start the Flask app on a separate thread
+    from threading import Thread
+    port = int(os.environ.get('PORT', 10000))  # Use the PORT environment variable or default to 10000
+    t = Thread(target=app_flask.run, kwargs={'host':'0.0.0.0', 'port':port})
+    t.start()
+
+    # Now run your bot
     while True:
         try:
             app.run()
-            break  # If successful, break out of the loop
+            break
         except FloodWait as e:
             print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
-            time.sleep(e.seconds)  # Wait for the required duration
+            time.sleep(e.seconds)
