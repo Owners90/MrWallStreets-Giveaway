@@ -2,6 +2,9 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import random
 
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=YOUR_PORT)
+    
 API_ID = '23601851'
 API_HASH = '122209a9c58d40ab8947ed409cc49ecd'
 BOT_TOKEN = '6547349199:AAEHYX6dD2R1kdS7lehxq0JzY7YLXhQuYuc'
