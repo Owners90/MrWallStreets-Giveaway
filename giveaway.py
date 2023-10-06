@@ -102,6 +102,4 @@ def end_giveaway(client, message):
     is_giveaway_active = False
     app.send_message(GIVEAWAY_CHAT_ID, "تم اغلاق السحب")
 
-# Run the app after defining everything
-if __name__ == '__main__':
-    app.run()
+app.run()
