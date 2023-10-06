@@ -1,6 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.errors import FloodWait
 import random
+import time
 
 API_ID = '23601851'
 API_HASH = '122209a9c58d40ab8947ed409cc49ecd'
@@ -14,24 +16,27 @@ is_giveaway_active = False
 
 app = Client("giveawayBot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
-# تحقق مما إذا كان المستخدم مسموحًا له
 def is_user_allowed(user_id):
     return user_id in ALLOWED_USER_IDS
 
 @app.on_message(filters.command("start_giveaway") & filters.chat(MANAGEMENT_CHAT_ID))
 def start_giveaway(client, message):
     global is_giveaway_active
-    if not is_user_allowed(message.from_user.id):
-        return
-    if is_giveaway_active:
-        app.send_message(MANAGEMENT_CHAT_ID, "يوجد سحب نشط حاليًا. يرجى إنهاء أو إلغاء السحب الحالي قبل بدء سحب جديد.")
-        return
+    try:
+        if not is_user_allowed(message.from_user.id):
+            return
+        if is_giveaway_active:
+            app.send_message(MANAGEMENT_CHAT_ID, "يوجد سحب نشط حاليًا. يرجى إنهاء أو إلغاء السحب الحالي قبل بدء سحب جديد.")
+            return
 
-    is_giveaway_active = True
-    markup = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("انضم الى السحب", callback_data="join_giveaway")]]
-    )
-    app.send_message(GIVEAWAY_CHAT_ID, "تم بدء سحب جديد! انقر على الزر أدناه للانضمام.", reply_markup=markup)
+        is_giveaway_active = True
+        markup = InlineKeyboardMarkup(
+            [[InlineKeyboardButton("انضم الى السحب", callback_data="join_giveaway")]]
+        )
+        app.send_message(GIVEAWAY_CHAT_ID, "تم بدء سحب جديد! انقر على الزر أدناه للانضمام.", reply_markup=markup)
+    except FloodWait as e:
+        print(f"Rate limit exceeded. Please wait for {e.x} seconds.")
+        time.sleep(e.x)
 
 @app.on_callback_query(filters.regex("^join_giveaway$"))
 def join_giveaway(client, callback_query):
@@ -101,6 +106,6 @@ def end_giveaway(client, message):
 
     is_giveaway_active = False
     app.send_message(GIVEAWAY_CHAT_ID, "تم اغلاق السحب")
-
+    
 if __name__ == '__main__':
     app.run()
