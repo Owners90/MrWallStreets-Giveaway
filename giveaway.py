@@ -2,9 +2,6 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import random
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=80)
-    
 API_ID = '23601851'
 API_HASH = '122209a9c58d40ab8947ed409cc49ecd'
 BOT_TOKEN = '6547349199:AAEHYX6dD2R1kdS7lehxq0JzY7YLXhQuYuc'
@@ -105,4 +102,6 @@ def end_giveaway(client, message):
     is_giveaway_active = False
     app.send_message(GIVEAWAY_CHAT_ID, "تم اغلاق السحب")
 
-app.run()
+# Run the app after defining everything
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=80)
