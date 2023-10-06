@@ -123,10 +123,10 @@ if __name__ == '__main__':
     t.start()
 
     # Now run your bot
-    while True:
-        try:
-            app.run()
-            break
-        except FloodWait as e:
-            print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
-            time.sleep(e.seconds)
+while True:
+    try:
+        app.run()
+        break  # If successful, break out of the loop
+    except FloodWait as e:
+        print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
+        time.sleep(e.seconds)  # Wait for the required duration
