@@ -119,14 +119,14 @@ if __name__ == '__main__':
     # Start the Flask app on a separate thread
     from threading import Thread
     port = int(os.environ.get('PORT', 10000))  # Use the PORT environment variable or default to 10000
-    t = Thread(target=app_flask.run, kwargs={'host':'0.0.0.0', 'port':port})
+    t = Thread(target=app_flask.run, kwargs={'host':'0.0.0.0', 'port':port, 'use_reloader': False, 'debug': False})
     t.start()
 
     # Now run your bot
-while True:
-    try:
-        app.run()
-        break  # If successful, break out of the loop
-    except FloodWait as e:
-        print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
-        time.sleep(e.seconds)  # Wait for the required duration
+    while True:
+        try:
+            app.run()
+            break  # If successful, break out of the loop
+        except FloodWait as e:
+            print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
+            time.sleep(e.seconds)  # Wait for the required duration
