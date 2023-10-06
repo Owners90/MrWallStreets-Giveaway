@@ -1,5 +1,6 @@
 from pyrogram import Client, filters, errors
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.errors import FloodWait
 import random
 import time
 
@@ -111,6 +112,6 @@ if __name__ == '__main__':
         try:
             app.run()
             break  # If successful, break out of the loop
-        except errors.FloodWait as e:
+        except FloodWait as e:
             print(f"Rate limit exceeded. Please wait for {e.seconds} seconds.")
             time.sleep(e.seconds)  # Wait for the required duration
