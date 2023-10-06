@@ -108,4 +108,10 @@ def end_giveaway(client, message):
     app.send_message(GIVEAWAY_CHAT_ID, "تم اغلاق السحب")
     
 if __name__ == '__main__':
-    app.run()
+    while True:
+        try:
+            app.run()
+            break  # If successful, break out of the loop
+        except FloodWait as e:
+            print(f"Rate limit exceeded. Please wait for {e.x} seconds.")
+            time.sleep(e.x)  # Wait for the required duration
